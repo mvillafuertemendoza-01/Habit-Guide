@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Streaks - Level Up Your Habits!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🎯</span>
+                <h1>Study Streaks</h1>
+            </div>
+            <div class="user-stats-mini">
+                <div class="stat-bubble">
+                    <span class="bubble-emoji">⚡</span>
+                    <span class="bubble-value" id="headerStreak">0</span>
+                </div>
+                <div class="stat-bubble">
+                    <span class="bubble-emoji">🏆</span>
+                    <span class="bubble-value" id="headerLevel">1</span>
+                </div>
+                <button class="btn-reflection" id="openReflectionBtn">
+                    📝 Weekly Reflection
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Weekly Check-in Banner -->
+            <div class="weekly-banner" id="weeklyBanner" style="display: none;">
+                <div class="banner-icon">📅</div>
+                <div class="banner-content">
+                    <h3>Time for Your Weekly Reflection!</h3>
+                    <p>Take a moment to reflect on your progress this week</p>
+                </div>
+                <button class="btn-banner" id="startReflectionBtn">Start Reflection</button>
+            </div>
+
+            <!-- Player Card -->
+            <section class="player-card">
+                <div class="player-avatar">
+                    <div class="avatar-circle">
+                        <span class="avatar-emoji" id="playerEmoji">🎓</span>
+                    </div>
+                    <div class="avatar-sparkles">✨</div>
+                </div>
+                <div class="player-info">
+                    <h2 class="player-name" id="playerName">Student Champion</h2>
+                    <div class="level-badge">
+                        Level <span id="playerLevel">1</span>
+                    </div>
+                    <div class="xp-bar-container">
+                        <div class="xp-bar">
+                            <div class="xp-fill" id="xpFill"></div>
+                        </div>
+                        <div class="xp-text"><span id="currentXP">0</span> / <span id="maxXP">100</span> XP</div>
+                    </div>
+                </div>
+                <div class="player-badges">
+                    <div class="badge-item">
+                        <span class="badge-icon">🔥</span>
+                        <div class="badge-info">
+                            <div class="badge-value" id="streakValue">0</div>
+                            <div class="badge-label">Day Streak</div>
+                        </div>
+                    </div>
+                    <div class="badge-item">
+                        <span class="badge-icon">⭐</span>
+                        <div class="badge-info">
+                            <div class="badge-value" id="pointsValue">0</div>
+                            <div class="badge-label">Total Points</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weekly Stats Summary -->
+            <section class="weekly-stats">
+                <h2>This Week's Progress</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-number" id="weekCompleted">0</div>
+                        <div class="stat-label">Habits Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-number" id="weekRate">0%</div>
+                        <div class="stat-label">Completion Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-number" id="weekStreak">0</div>
+                        <div class="stat-label">Active Days</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💎</div>
+                        <div class="stat-number" id="weekPoints">0</div>
+                        <div class="stat-label">Points Earned</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Habits Section -->
+            <section class="habits-section">
+                <div class="section-header">
+                    <h2>Today's Habits</h2>
+                    <button class="btn-add" id="addHabitBtn">
+                        <span>+</span> Add Habit
+                    </button>
+                </div>
+
+                <div class="habits-grid" id="habitsGrid">
+                    <!-- Habits will be dynamically added here -->
+                </div>
+
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">📚</div>
+                    <h3>No habits yet!</h3>
+                    <p>Click "Add Habit" to start building your routine</p>
+                </div>
+            </section>
+
+            <!-- Achievements Section -->
+            <section class="achievements-section">
+                <h2>Achievements</h2>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Achievements will be dynamically added here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Habit Modal -->
+    <div class="modal-overlay" id="habitModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Create New Habit</h2>
+                <button class="btn-close" id="closeModal">×</button>
+            </div>
+            <form id="habitForm">
+                <div class="form-group">
+                    <label for="habitName">Habit Name</label>
+                    <input type="text" id="habitName" placeholder="e.g., Study Math for 30 minutes" required>
+                </div>
+                <div class="form-group">
+                    <label for="habitEmoji">Choose an Emoji</label>
+                    <div class="emoji-picker">
+                        <button type="button" class="emoji-btn" data-emoji="📚">📚</button>
+                        <button type="button" class="emoji-btn" data-emoji="✍️">✍️</button>
+                        <button type="button" class="emoji-btn" data-emoji="💻">💻</button>
+                        <button type="button" class="emoji-btn" data-emoji="🎨">🎨</button>
+                        <button type="button" class="emoji-btn" data-emoji="🏃">🏃</button>
+                        <button type="button" class="emoji-btn" data-emoji="🧘">🧘</button>
+                        <button type="button" class="emoji-btn" data-emoji="🎵">🎵</button>
+                        <button type="button" class="emoji-btn" data-emoji="🌟">🌟</button>
+                    </div>
+                    <input type="hidden" id="habitEmoji" value="📚">
+                </div>
+                <div class="form-group">
+                    <label for="habitPoints">Difficulty (Points)</label>
+                    <select id="habitPoints">
+                        <option value="10">Easy - 10 points</option>
+                        <option value="20" selected>Medium - 20 points</option>
+                        <option value="30">Hard - 30 points</option>
+                        <option value="50">Super Hard - 50 points</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Habit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Weekly Reflection Modal -->
+    <div class="modal-overlay" id="reflectionModal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2>📝 Weekly Reflection</h2>
+                <button class="btn-close" id="closeReflectionModal">×</button>
+            </div>
+            
+            <div class="reflection-tabs">
+                <button class="tab-btn active" data-tab="current">This Week</button>
+                <button class="tab-btn" data-tab="history">Past Reflections</button>
+            </div>
+
+            <div class="tab-content active" id="currentTab">
+                <div class="weekly-summary">
+                    <h3>Week of <span id="weekDateRange"></span></h3>
+                    <div class="summary-stats">
+                        <div class="summary-item">
+                            <span class="summary-label">Completed:</span>
+                            <span class="summary-value" id="summaryCompleted">0 habits</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Success Rate:</span>
+                            <span class="summary-value" id="summaryRate">0%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Points Earned:</span>
+                            <span class="summary-value" id="summaryPoints">0 pts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="reflectionForm">
+                    <div class="form-group">
+                        <label>🎯 What went well this week?</label>
+                        <textarea id="wentWell" rows="3" placeholder="Think about your wins, no matter how small..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>💭 What challenges did you face?</label>
+                        <textarea id="challenges" rows="3" placeholder="What made it difficult to stick to your habits?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>💡 What did you learn about yourself?</label>
+                        <textarea id="learned" rows="3" placeholder="Any insights or realizations?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🚀 Goals for next week</label>
+                        <textarea id="nextWeekGoals" rows="3" placeholder="What do you want to focus on next week?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>⭐ Rate your week (1-5)</label>
+                        <div class="star-rating">
+                            <button type="button" class="star-btn" data-rating="1">⭐</button>
+                            <button type="button" class="star-btn" data-rating="2">⭐</button>
+                            <button type="button" class="star-btn" data-rating="3">⭐</button>
+                            <button type="button" class="star-btn" data-rating="4">⭐</button>
+                            <button type="button" class="star-btn" data-rating="5">⭐</button>
+                        </div>
+                        <input type="hidden" id="weekRating" value="0">
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" id="cancelReflection">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Reflection</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-content" id="historyTab">
+                <div class="reflections-history" id="reflectionsHistory">
+                    <!-- Past reflections will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Up Modal -->
+    <div class="modal-overlay" id="levelUpModal">
+        <div class="modal level-up-modal">
+            <div class="level-up-content">
+                <div class="level-up-icon">🎉</div>
+                <h2>Level Up!</h2>
+                <div class="new-level">Level <span id="newLevel">2</span></div>
+                <p>Keep up the amazing work!</p>
+                <button class="btn-primary" id="closeLevelUp">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
